@@ -1,16 +1,97 @@
-# React + Vite
+# Inventory & Order Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack Inventory and Order Management System built using Spring Boot and React.
 
-Currently, two official plugins are available:
+## 🚀 Frontend Development Progress
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Currently working on the frontend part of the project using React.
 
-## React Compiler
+Implemented features so far:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Add Product
+- View Products
+- Product Details Page
+- Edit Product
+- Delete Product
 
-## Expanding the ESLint configuration
+## ⚛️ React Concepts Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React Components
+- Props
+- useState
+- useEffect
+- React Router DOM
+- Dynamic Routing using `useParams`
+- Navigation using `useNavigate`
+- Fetch API for backend communication
+
+## 🔗 Routing Structure
+
+Used `react-router-dom` to connect components and pages together through routes.
+
+Examples:
+
+- `/products`
+- `/products/:id`
+- `/products/edit/:id`
+
+This helped in creating:
+
+- Product listing page
+- Product details page
+- Edit product page
+
+## 🔄 Backend Integration
+
+Connected React frontend with Spring Boot backend APIs using Fetch API.
+
+Learned:
+
+- Fetching data from backend
+- Sending POST, PUT, DELETE requests
+- Handling dynamic product IDs
+- Updating UI based on backend responses
+
+## 🛠 Backend Changes During Frontend Development
+
+While implementing delete functionality, faced a foreign key constraint issue because products were connected with the `order_item` table.
+
+Instead of permanently deleting products from the database, implemented an `active` property in Product.
+
+### Current Logic
+
+- `active = true` → Product visible
+- `active = false` → Product hidden
+
+Only active products are shown in the frontend.
+
+This approach prevents breaking existing order history and maintains database integrity.
+
+## 🧠 Learning Experience
+
+This project helped me understand:
+
+- How frontend and backend communicate
+- How routing works in React
+- CRUD operations in full-stack applications
+- State management basics
+- Real-world database relationship problems
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- React
+- React Router DOM
+- CSS
+
+### Backend
+
+- Spring Boot
+- Spring Data JPA
+- MySQL
+
+## 📌 Project Status
+
+Frontend development is currently in progress.
+More features and UI improvements will be added soon.
