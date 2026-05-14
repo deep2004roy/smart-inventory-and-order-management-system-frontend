@@ -17,6 +17,9 @@ function Navbar() {
         <Link to={"/add"}>
           <p>Add product</p>
         </Link>
+        <Link to={"/orders"}>
+          <p>Orders</p>
+        </Link>
       </div>
     </nav>
   );

@@ -8,7 +8,7 @@ function Product({ product }) {
         <p className="category">{product.category}</p>
         <p>{product.description}</p>
         <h3>₹ {product.price}</h3>
-        <p>Quantity: {product.quantity}</p>
+        <p>Stock: {product.quantity}</p>
       </div>
     </Link>
   );
