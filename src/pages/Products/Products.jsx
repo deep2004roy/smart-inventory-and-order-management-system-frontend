@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Product from "./components/Product/Product";
+import Product from "../../components/ProductCard/Product";
 import "./Products.css";
 
 function Products() {

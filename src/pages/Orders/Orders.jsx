@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import OrderCard from "./components/OrderCard/OrderCard";
+import OrderCard from "../../components/OrderCard/OrderCard";
 import "./Orders.css";
 import { Link } from "react-router-dom";
 

@@ -95,3 +95,227 @@ This project helped me understand:
 
 Frontend development is currently in progress.
 More features and UI improvements will be added soon.
+
+# Smart Inventory & Order Management System – Feature Update
+
+## Overview
+
+This update introduces major e-commerce functionalities to the Smart Inventory & Order Management System, including direct product purchasing, cart management, backend cart summary calculations, checkout workflow, and admin order status management.
+
+---
+
+# Buy Now Feature
+
+Implemented a **Buy Now** button inside the Product Details page.
+
+This feature allows users to immediately purchase a product without adding it to the cart.
+
+### Workflow
+
+```text
+Product Details
+↓
+Buy Now
+↓
+Checkout
+↓
+Order Created
+```
+
+---
+
+# Add to Cart Feature
+
+Implemented a complete cart functionality.
+
+Users can:
+
+- Add products to cart
+- Remove products from cart
+- Add multiple products
+- Increase quantity of products
+- Manage quantity-wise product addition
+
+Example:
+
+```text
+Laptop × 2
+Mouse × 1
+Keyboard × 3
+```
+
+---
+
+# Cart Summary Feature
+
+Before placing an order, users can preview the complete purchase summary.
+
+Displayed information:
+
+- Product Name
+- Product Price
+- Quantity
+- Subtotal of each product
+- Total Items
+- Total Amount
+
+### Workflow
+
+```text
+Cart
+↓
+Backend Summary Calculation
+↓
+Summary DTO Response
+↓
+Display Total and Subtotals
+```
+
+---
+
+# Backend DTO Design
+
+To support cart summary calculations before checkout, two DTOs were introduced.
+
+## CartSummaryItem
+
+Stores product-level summary data.
+
+Fields:
+
+- productName
+- price
+- quantity
+- subtotal
+
+---
+
+## CartSummaryResponse
+
+Stores complete cart summary information.
+
+Fields:
+
+- List<CartSummaryItem>
+- totalItems
+- totalAmount
+
+This design allows the backend to calculate cart totals and send structured JSON responses to the frontend.
+
+---
+
+# Checkout and Order Creation
+
+Implemented Checkout functionality.
+
+When the user clicks Checkout:
+
+- Order is created
+- OrderItems are created
+- Total amount is calculated
+- Inventory stock is automatically reduced
+- Order is saved into database
+- Default status is assigned
+
+Default status:
+
+```text
+PENDING
+```
+
+---
+
+# Admin Order Status Management
+
+Implemented admin functionality for managing order lifecycle.
+
+Admin can update order status directly from frontend using a dropdown.
+
+Supported statuses:
+
+```text
+PENDING
+CONFIRMED
+SHIPPED
+DELIVERED
+CANCELLED
+```
+
+### Order Lifecycle
+
+```text
+Order Created
+↓
+PENDING
+↓
+CONFIRMED
+↓
+SHIPPED
+↓
+DELIVERED
+```
+
+---
+
+# Frontend Implementation
+
+Implemented:
+
+- Order Details page
+- Status dropdown
+- API integration
+- Dynamic status updates
+- Cart summary display
+- Quantity-wise cart management
+
+---
+
+# Backend Implementation
+
+Implemented:
+
+- OrderStatus Enum
+- Status update API
+- Cart summary APIs
+- DTO-based responses
+- Inventory updates
+- Order management logic
+
+---
+
+# Technologies Used
+
+## Backend
+
+- Java
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- Lombok
+- REST APIs
+- DTO Pattern
+- Enum
+
+## Frontend
+
+- React
+- React Router
+- Fetch API
+- React Hooks
+
+---
+
+# Outcome
+
+This update transformed the project from basic CRUD operations into a more realistic inventory and order management workflow by introducing:
+
+- Buy Now flow
+- Cart functionality
+- Checkout process
+- Backend summary calculations
+- DTO design
+- Inventory updates
+- Admin order management
+- Order lifecycle handling
+
+These features move the project closer to a real-world e-commerce application architecture.

@@ -5,6 +5,7 @@ import "./OrderDetails.css";
 function OrderDetails() {
   const { id } = useParams();
   const [order, setOrder] = useState({});
+  const [status, setStatus] = useState("PENDING");
   useEffect(() => {
     fetchOrderDetails();
   }, [id]);
@@ -17,6 +18,26 @@ function OrderDetails() {
       }
       const data = await response.json();
       setOrder(data);
+      setStatus(data.status);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchStatus = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8081/orders/${id}/status/${status}`,
+        {
+          method: "PUT",
+        },
+      );
+      if (!response.ok) {
+        throw new Error("No such order with this id");
+      }
+      const data = await response.json();
+      setOrder(data);
+      setStatus(data.status);
     } catch (error) {
       console.log(error);
     }
@@ -29,6 +50,14 @@ function OrderDetails() {
       <p>Date: {order.date}</p>
       <p>Total Amount: ₹{order.totalAmount}</p>
       <p>Status: {order.status}</p>
+      <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <option value="PENDING">PENDING</option>
+        <option value="CONFIRMED">CONFIRMED</option>
+        <option value="SHIPPED">SHIPPED</option>
+        <option value="DELIVERED">DELIVERED</option>
+        <option value="CANCELLED">CANCELLED</option>
+      </select>
+      <button onClick={fetchStatus}>Update status</button>
     </div>
   );
 }

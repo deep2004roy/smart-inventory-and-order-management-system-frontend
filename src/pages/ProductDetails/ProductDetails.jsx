@@ -54,7 +54,6 @@ function ProductDetails() {
         body: JSON.stringify(order),
       });
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         throw new Error("order not found");
       }

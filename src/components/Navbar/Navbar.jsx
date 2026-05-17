@@ -20,6 +20,9 @@ function Navbar() {
         <Link to={"/orders"}>
           <p>Orders</p>
         </Link>
+        <Link to={"/cart"}>
+          <p>Cart</p>
+        </Link>
       </div>
     </nav>
   );
