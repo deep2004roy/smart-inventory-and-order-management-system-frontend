@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
 import Product from "../../components/ProductCard/Product";
 import "./Products.css";
-import { Link } from "react-router-dom";
 
 function Products() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState("");
+  const [sort, setSort] = useState("");
+  const [page, setPage] = useState(0);
 
-  //-----------------fetching products------------------------
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:8081/products");
+      const response = await fetch(
+        `http://localhost:8081/products?search=${search}&category=${category}&sort=${sort}&page=${page}&size=5`,
+      );
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
       const data = await response.json();
-      setProducts(data);
+      setProducts(data.content);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    //logic
     fetchProducts();
-  }, []);
+  }, [search, category, sort, page]);
 
   return (
     <div>
@@ -31,14 +36,32 @@ function Products() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Link to={`/products/search?keyword=${search}`}>
-          <button>Search</button>
-        </Link>
+
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="">All</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Books">Books</option>
+          <option value="Cloths">Cloths</option>
+        </select>
+
+        <select value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="">Default</option>
+          <option value="price,asc">Low to high</option>
+          <option value="price,desc">High to Low</option>
+        </select>
       </div>
+
       <div className="products">
         {products.map((product) => (
           <Product key={product.id} product={product} />
         ))}
+      </div>
+
+      <div>
+        <button onClick={() => setPage(page - 1)} disabled={page === 0}>
+          Prev
+        </button>
+        <button onClick={() => setPage(page + 1)}>Next</button>
       </div>
     </div>
   );

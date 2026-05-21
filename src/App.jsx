@@ -7,11 +7,9 @@ import EditProduct from "./pages/EditProduct/EditProduct";
 import Orders from "./pages/Orders/Orders";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import Cart from "./pages/Cart/Cart";
-import SearchedProducts from "./pages/SearchedProducts/SearchProducts";
 function App() {
   return (
     <Routes>
-      <Route path="/products/search" element={<SearchedProducts />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/" element={<Navbar />} />
       <Route path="/orders/:id" element={<OrderDetails />} />

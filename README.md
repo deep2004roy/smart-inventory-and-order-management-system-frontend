@@ -319,3 +319,279 @@ This update transformed the project from basic CRUD operations into a more reali
 - Order lifecycle handling
 
 These features move the project closer to a real-world e-commerce application architecture.
+
+# Product Module Progress Update
+
+## Overview
+
+In this phase of my **Inventory and Order Management System** project, I implemented several important product-related features:
+
+- 🔍 Search Products
+- 🗂️ Filter Products by Category
+- ↕️ Sort Products by Price
+- 📄 Pagination
+
+This phase helped me move from basic CRUD functionality toward building more realistic product browsing features similar to real-world applications.
+
+---
+
+# 🔍 Search Products
+
+I implemented a search feature that allows users to search products by keyword.
+
+Initially, I implemented this feature by:
+
+- Clicking a button
+- Routing to a separate page
+- Fetching search results on that page
+- Rendering products on the new page
+
+### Flow
+
+```text
+Products Page
+      ↓
+Search Button Clicked
+      ↓
+Route → /products/search
+      ↓
+Fetch Search Results
+      ↓
+Render Products
+```
+
+This approach worked and helped me understand routing and parameter passing.
+
+---
+
+# 🗂️ Filter Products by Category
+
+I also implemented category-based filtering.
+
+Users can select categories such as:
+
+- Electronics
+- Books
+- Clothes
+
+Initially, filtering followed the same architecture:
+
+```text
+Button Click
+    ↓
+Navigate to another page
+    ↓
+Fetch filtered products
+    ↓
+Render products
+```
+
+This helped me understand feature implementation step-by-step.
+
+---
+
+# ↕️ Sort Products by Price
+
+I later added sorting functionality.
+
+Users can choose:
+
+- Price: Low → High
+- Price: High → Low
+
+Backend sorting was implemented using **Spring Data Sort**.
+
+Examples:
+
+```text
+price,asc
+price,desc
+```
+
+The backend processes sorting and returns products accordingly.
+
+---
+
+# 🚀 Architectural Improvement
+
+After implementing search and filter separately using page routing, I realized there was a cleaner and more scalable approach.
+
+Instead of:
+
+```text
+One feature
+→ One page
+→ One route
+→ One fetch function
+```
+
+I integrated all features into:
+
+- One URL
+- One fetch function
+- One useEffect
+- One products state
+
+### Example URL
+
+```text
+/products?search=&category=&sort=
+```
+
+Frontend updates query parameters dynamically.
+
+Examples:
+
+```text
+/products?search=laptop
+
+/products?category=Electronics
+
+/products?sort=price,asc
+```
+
+### Single fetch function
+
+```javascript
+fetchProducts();
+```
+
+### Single useEffect
+
+```javascript
+useEffect(() => {
+  fetchProducts();
+}, [search, category, sort]);
+```
+
+Products update automatically:
+
+```javascript
+setProducts(data);
+```
+
+This approach is cleaner and closer to real-world frontend architecture.
+
+---
+
+# ⚠️ Current Limitation
+
+Currently, I intentionally designed the logic to execute **one feature at a time**:
+
+```text
+Search
+OR
+Filter
+OR
+Sort
+```
+
+instead of:
+
+```text
+Search
+↓
+Filter
+↓
+Sort
+↓
+Final Result
+```
+
+Reason:
+
+My current goal is learning feature implementation individually.
+
+Later I plan to merge multiple functionalities together and support workflows such as:
+
+```text
+Search Product
+      ↓
+Filter Category
+      ↓
+Sort Price
+      ↓
+Return Result
+```
+
+This will make the application behave closer to production systems.
+
+---
+
+# 📄 Pagination
+
+To make product browsing more scalable, I implemented pagination.
+
+Without pagination:
+
+```text
+Return all products
+```
+
+Problems:
+
+- Large response size
+- Slow loading
+- Poor user experience
+
+With pagination:
+
+```text
+/products?page=0&size=5
+```
+
+Users can browse products page-by-page.
+
+Example:
+
+### Page 1
+
+```text
+Product 1
+Product 2
+Product 3
+Product 4
+Product 5
+```
+
+### Page 2
+
+```text
+Product 6
+Product 7
+Product 8
+...
+```
+
+Pagination was integrated with:
+
+- Normal product fetching
+- Search
+- Filter
+- Sorting
+
+using Spring Boot:
+
+```java
+Pageable pageable =
+PageRequest.of(page,size);
+```
+
+This makes the product module more realistic and scalable.
+
+---
+
+# 📚 Learning Outcomes
+
+Through this implementation I learned:
+
+- Route-based feature rendering
+- Query parameters
+- Dynamic fetching
+- useEffect dependencies
+- State-driven UI updates
+- Spring Boot sorting
+- Pagination with Pageable
+- Improving architecture gradually
+
+This phase was an important step in moving from simple CRUD applications toward real-world full-stack application design.
