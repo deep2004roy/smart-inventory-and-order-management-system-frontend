@@ -595,3 +595,193 @@ Through this implementation I learned:
 - Improving architecture gradually
 
 This phase was an important step in moving from simple CRUD applications toward real-world full-stack application design.
+
+# Authentication Module - Frontend
+
+## Overview
+
+In this phase of the project, I integrated the React frontend with the Spring Boot backend authentication system using **Spring Security** and **JWT (JSON Web Token)**.
+
+The objective was to create a secure login flow where users authenticate through the frontend and gain access to protected backend APIs.
+
+This was my first complete implementation of frontend authentication integrated with a secured backend.
+
+---
+
+## Login Page Implementation
+
+A dedicated login page was created using React.
+
+The page contains:
+
+- Username field
+- Password field
+- Login button
+
+Input values are managed using React state:
+
+```js
+const [username, setUsername] = useState("");
+const [password, setPassword] = useState("");
+```
+
+Users enter credentials and submit them to the backend.
+
+---
+
+## Authentication Flow
+
+The login process follows this sequence:
+
+```text
+User enters credentials
+          ↓
+Clicks Login
+          ↓
+POST request sent to backend
+          ↓
+Spring Security verifies user
+          ↓
+JWT token generated
+          ↓
+Token returned to frontend
+          ↓
+Store token in localStorage
+```
+
+Frontend request:
+
+```js
+const response = await fetch("http://localhost:8081/login", {
+  method: "POST",
+
+  headers: {
+    "Content-Type": "application/json",
+  },
+
+  body: JSON.stringify({
+    username,
+    password,
+  }),
+});
+```
+
+---
+
+## Storing JWT Token
+
+After successful authentication, the backend returns a JWT token.
+
+The token is stored in browser local storage:
+
+```js
+const token = await response.text();
+
+localStorage.setItem("token", token);
+```
+
+This allows the application to remember authenticated users.
+
+---
+
+## Accessing Protected APIs
+
+For protected APIs, the JWT token is retrieved from local storage and attached to requests.
+
+Example:
+
+```js
+const token = localStorage.getItem("token");
+
+const response = await fetch("http://localhost:8081/products", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+```
+
+Flow:
+
+```text
+Login
+    ↓
+Store JWT
+    ↓
+Request products
+    ↓
+Attach token
+    ↓
+Backend validates JWT
+    ↓
+Access granted
+```
+
+---
+
+## Issue Faced: CORS Problem
+
+During implementation, protected API requests were failing because of a Cross-Origin issue.
+
+Error:
+
+```text
+No 'Access-Control-Allow-Origin' header
+```
+
+Reason:
+
+Frontend:
+
+```text
+localhost:5173
+```
+
+Backend:
+
+```text
+localhost:8081
+```
+
+Since the frontend and backend run on different ports, browser security triggered a CORS restriction.
+
+The issue was resolved by configuring CORS inside Spring Security.
+
+---
+
+## Learning Outcomes
+
+Through this implementation I learned:
+
+- React login implementation
+- Sending POST requests
+- JWT authentication flow
+- Browser local storage
+- Authorization headers
+- Protected API communication
+- Spring Security integration
+- React + JWT workflow
+- Debugging CORS issues
+
+---
+
+## Current Status
+
+Implemented:
+
+- Login page
+- JWT generation
+- Token storage
+- Protected API access
+- React + Spring Security integration
+
+Planned improvements:
+
+- Logout functionality
+- Protected frontend routes
+- Role-based UI rendering
+- Axios integration
+- Authentication persistence improvements
+
+---
+
+This authentication module was an important step in transforming the project from a basic CRUD application into a real-world secured full-stack application.

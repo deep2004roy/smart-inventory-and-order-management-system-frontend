@@ -11,12 +11,20 @@ function Products() {
 
   const fetchProducts = async () => {
     try {
+      const token = localStorage.getItem("token");
+      console.log(token);
       const response = await fetch(
         `http://localhost:8081/products?search=${search}&category=${category}&sort=${sort}&page=${page}&size=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       if (!response.ok) {
         throw new Error("Request failed");
       }
+      console.log(response.status);
       const data = await response.json();
       setProducts(data.content);
     } catch (error) {

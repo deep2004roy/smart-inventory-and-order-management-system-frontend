@@ -7,9 +7,11 @@ import EditProduct from "./pages/EditProduct/EditProduct";
 import Orders from "./pages/Orders/Orders";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import Cart from "./pages/Cart/Cart";
+import LoginPage from "./pages/LoginPage/LoginPage";
 function App() {
   return (
     <Routes>
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/" element={<Navbar />} />
       <Route path="/orders/:id" element={<OrderDetails />} />
