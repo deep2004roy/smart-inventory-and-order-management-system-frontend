@@ -1,8 +1,14 @@
 //import
 import "./Navbar.css";
-import { Link } from "react-router-dom"; //loading css
+import { Link, useNavigate } from "react-router-dom"; //loading css
 
 function Navbar() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     //UI
     <nav className="navbar">
@@ -23,6 +29,11 @@ function Navbar() {
         <Link to={"/cart"}>
           <p>Cart</p>
         </Link>
+        {token ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : (
+          <button onClick={() => navigate("/login")}>Login</button>
+        )}
       </div>
     </nav>
   );

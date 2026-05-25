@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
+import Navbar from "../../components/Navbar/Navbar";
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -67,31 +68,34 @@ function ProductDetails() {
     productDetails();
   }, [id]);
   return (
-    <div className="product-details-card">
-      <h2>{product.name}</h2>
-      <p className="category">{product.category}</p>
-      <p>{product.description}</p>
-      <h3>₹ {product.price}</h3>
-      <p>Stock: {product.quantity}</p>
+    <div>
+      <Navbar />
+      <div className="product-details-card">
+        <h2>{product.name}</h2>
+        <p className="category">{product.category}</p>
+        <p>{product.description}</p>
+        <h3>₹ {product.price}</h3>
+        <p>Stock: {product.quantity}</p>
 
-      <label htmlFor="qty">Quantity:</label>
-      <input
-        type="number"
-        name="quantity-needed"
-        id="qty"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-      />
-      <button onClick={handleBuy}>Buy now</button>
-      <button onClick={() => addToCart(Number(id), Number(quantity))}>
-        Add to cart
-      </button>
+        <label htmlFor="qty">Quantity:</label>
+        <input
+          type="number"
+          name="quantity-needed"
+          id="qty"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+        <button onClick={handleBuy}>Buy now</button>
+        <button onClick={() => addToCart(Number(id), Number(quantity))}>
+          Add to cart
+        </button>
 
-      <div className="product-buttons">
-        <Link to={`/products/edit/${id}`}>
-          <button>Edit</button>
-        </Link>
-        <button onClick={handleDelete}>Delete</button>
+        <div className="product-buttons">
+          <Link to={`/products/edit/${id}`}>
+            <button>Edit</button>
+          </Link>
+          <button onClick={handleDelete}>Delete</button>
+        </div>
       </div>
     </div>
   );

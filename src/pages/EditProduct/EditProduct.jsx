@@ -62,6 +62,7 @@ function EditProduct() {
 
   return (
     <div className="outer-form-container">
+      <Navbar />
       <p>Edit Product</p>
       <form className="form-container" onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>

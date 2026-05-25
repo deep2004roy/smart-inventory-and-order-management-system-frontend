@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Product from "../../components/ProductCard/Product";
 import "./Products.css";
+import Navbar from "../../components/Navbar/Navbar";
 
 function Products() {
   const [search, setSearch] = useState("");
@@ -37,39 +38,45 @@ function Products() {
 
   return (
     <div>
+      <Navbar />
       <div>
-        <input
-          type="text"
-          placeholder="Search something..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Search something..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">All</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Books">Books</option>
-          <option value="Cloths">Cloths</option>
-        </select>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books</option>
+            <option value="Cloths">Cloths</option>
+          </select>
 
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="">Default</option>
-          <option value="price,asc">Low to high</option>
-          <option value="price,desc">High to Low</option>
-        </select>
-      </div>
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="">Default</option>
+            <option value="price,asc">Low to high</option>
+            <option value="price,desc">High to Low</option>
+          </select>
+        </div>
 
-      <div className="products">
-        {products.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </div>
+        <div className="products">
+          {products.map((product) => (
+            <Product key={product.id} product={product} />
+          ))}
+        </div>
 
-      <div>
-        <button onClick={() => setPage(page - 1)} disabled={page === 0}>
-          Prev
-        </button>
-        <button onClick={() => setPage(page + 1)}>Next</button>
+        <div>
+          <button onClick={() => setPage(page - 1)} disabled={page === 0}>
+            Prev
+          </button>
+          <button onClick={() => setPage(page + 1)}>Next</button>
+        </div>
       </div>
     </div>
   );

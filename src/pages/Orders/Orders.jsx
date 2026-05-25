@@ -23,11 +23,14 @@ function Orders() {
   }, []);
 
   return (
-    <div className="orders-container">
-      {orders.map((order) => (
-        <OrderCard key={order.id} order={order} />
-      ))}
-    </div>
+    <>
+      <Navbar />
+      <div className="orders-container">
+        {orders.map((order) => (
+          <OrderCard key={order.id} order={order} />
+        ))}
+      </div>
+    </>
   );
 }
 export default Orders;

@@ -33,6 +33,7 @@ function Cart() {
   }, [cart]);
   return (
     <div>
+      <Navbar />
       <div className="cart-container">
         {cart.map((item) => {
           const summaryItem = summary.cartSummaryItems?.find(

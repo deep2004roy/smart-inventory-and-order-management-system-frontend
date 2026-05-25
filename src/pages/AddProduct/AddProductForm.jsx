@@ -1,3 +1,4 @@
+import Navbar from "../../components/Navbar/Navbar";
 import "./AddProductForm.css";
 import { useState } from "react";
 function AddProductForm() {
@@ -45,6 +46,7 @@ function AddProductForm() {
 
   return (
     <div className="outer-form-container">
+      <Navbar />
       <p>Add Product</p>
       <form className="form-container" onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
