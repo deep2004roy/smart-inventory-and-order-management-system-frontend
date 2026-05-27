@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./OrderDetails.css";
+import api from "../../services/api";
 
 function OrderDetails() {
   const { id } = useParams();
@@ -12,13 +13,9 @@ function OrderDetails() {
 
   const fetchOrderDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/orders/${id}`);
-      if (!response.ok) {
-        throw new Error("No such order available");
-      }
-      const data = await response.json();
-      setOrder(data);
-      setStatus(data.status);
+      const response = await api.get(`/orders/${id}`);
+      setOrder(response.data);
+      setStatus(response.data.status);
     } catch (error) {
       console.log(error);
     }
@@ -26,16 +23,7 @@ function OrderDetails() {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8081/orders/${id}/status/${status}`,
-        {
-          method: "PUT",
-        },
-      );
-      if (!response.ok) {
-        throw new Error("No such order with this id");
-      }
-      const data = await response.json();
+      const response = await api.put(`/orders/${id}/status/${status}`);
       setOrder(data);
       setStatus(data.status);
     } catch (error) {

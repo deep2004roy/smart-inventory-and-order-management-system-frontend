@@ -1,27 +1,24 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [searchParams] = useSearchParams();
+  const expired = searchParams.get("expired");
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8081/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
+      const response = await api.post("/login", {
+        username,
+        password,
       });
-
-      console.log(response);
-
-      const token = await response.text();
-      localStorage.setItem("token", token);
-      console.log(token);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role);
+      navigate("/products");
     } catch (error) {
       console.log(error);
     }
@@ -29,6 +26,7 @@ function LoginPage() {
 
   return (
     <>
+      {expired && <p>Session expired. Please Login again.</p>}
       <input
         type="text"
         value={username}

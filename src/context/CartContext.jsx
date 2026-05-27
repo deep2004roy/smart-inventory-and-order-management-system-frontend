@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { createContext } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const CartContext = createContext();
 
@@ -45,13 +46,7 @@ function CartProvider({ children }) {
   const checkOut = async () => {
     const order = { orderItemRequests: cart };
     try {
-      const response = await fetch(`http://localhost:8081/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      });
+      const response = await fetch(`/orders`, order);
       if (!response.ok) {
         throw new Error("no such order");
       }

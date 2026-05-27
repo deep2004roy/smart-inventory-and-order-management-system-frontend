@@ -2,6 +2,8 @@ import { useState } from "react";
 import CartCard from "../../components/CartCard/CartCard";
 import { useCart } from "../../context/CartContext";
 import { useEffect } from "react";
+import api from "../../services/api";
+import Navbar from "../../components/Navbar/Navbar";
 function Cart() {
   const [summary, setSummary] = useState({});
   const { cart } = useCart();
@@ -11,19 +13,8 @@ function Cart() {
       const request = {
         orderItemRequests: cart,
       };
-      const response = await fetch("http://localhost:8081/cart/summary", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-      if (!response.ok) {
-        throw new Error("request failed");
-      }
-      const data = await response.json();
-      console.log(data);
-      setSummary(data);
+      const response = await api.post("/cart/summary", request);
+      setSummary(response.data);
     } catch (error) {
       console.log(error);
     }

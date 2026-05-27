@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
 import Navbar from "../../components/Navbar/Navbar";
+import axios from "axios";
+import api from "../../services/api";
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -12,12 +14,12 @@ function ProductDetails() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const role = localStorage.getItem("role");
 
   const productDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/products/${id}`);
-      const data = await response.json();
-      setProduct(data);
+      const response = await api.get(`/products/${id}`);
+      setProduct(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -25,12 +27,7 @@ function ProductDetails() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/products/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Delete failed");
-      }
+      const response = await api.delete(`/products/${id}`);
       navigate("/products");
     } catch (error) {
       console.log(error);
@@ -47,17 +44,7 @@ function ProductDetails() {
       ],
     };
     try {
-      const response = await fetch(`http://localhost:8081/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error("order not found");
-      }
+      const response = await api.post(`/orders`, order);
       navigate("/products");
     } catch (error) {
       console.log(error);
@@ -89,13 +76,14 @@ function ProductDetails() {
         <button onClick={() => addToCart(Number(id), Number(quantity))}>
           Add to cart
         </button>
-
-        <div className="product-buttons">
-          <Link to={`/products/edit/${id}`}>
-            <button>Edit</button>
-          </Link>
-          <button onClick={handleDelete}>Delete</button>
-        </div>
+        {role === "ADMIN" && (
+          <div className="product-buttons">
+            <Link to={`/products/edit/${id}`}>
+              <button>Edit</button>
+            </Link>
+            <button onClick={handleDelete}>Delete</button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Product from "../../components/ProductCard/Product";
 import "./Products.css";
 import Navbar from "../../components/Navbar/Navbar";
+import api from "../../services/api";
 
 function Products() {
   const [search, setSearch] = useState("");
@@ -9,33 +10,38 @@ function Products() {
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const fetchProducts = async () => {
     try {
-      const token = localStorage.getItem("token");
-      console.log(token);
-      const response = await fetch(
-        `http://localhost:8081/products?search=${search}&category=${category}&sort=${sort}&page=${page}&size=5`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+      setLoading(true);
+      setError("");
+      const response = await api.get(
+        `/products?search=${search}&category=${category}&sort=${sort}&page=${page}&size=5`,
       );
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-      console.log(response.status);
-      const data = await response.json();
-      setProducts(data.content);
+      setProducts(response.data.content);
     } catch (error) {
-      console.log(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     fetchProducts();
   }, [search, category, sort, page]);
 
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (error) {
+    return <h2>{error}</h2>;
+  }
+
+  if (products.length === 0) {
+    return <h2>No products found</h2>;
+  }
   return (
     <div>
       <Navbar />

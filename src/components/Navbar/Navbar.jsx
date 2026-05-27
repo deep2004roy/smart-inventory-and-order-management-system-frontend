@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"; //loading css
 function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -20,9 +21,11 @@ function Navbar() {
         <Link to={"/products"}>
           <p>Products</p>
         </Link>
-        <Link to={"/add"}>
-          <p>Add product</p>
-        </Link>
+        {role === "ADMIN" && (
+          <Link to={"/add"}>
+            <p>Add product</p>
+          </Link>
+        )}
         <Link to={"/orders"}>
           <p>Orders</p>
         </Link>

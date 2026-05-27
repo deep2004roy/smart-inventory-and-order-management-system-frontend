@@ -9,6 +9,7 @@ import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import Cart from "./pages/Cart/Cart";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
 function App() {
   return (
     <Routes>
@@ -41,7 +42,9 @@ function App() {
         path="/add"
         element={
           <ProtectedRoute>
-            <AddProductForm />{" "}
+            <AdminRoute>
+              <AddProductForm />{" "}
+            </AdminRoute>
           </ProtectedRoute>
         }
       />
@@ -65,7 +68,9 @@ function App() {
         path="/products/edit/:id"
         element={
           <ProtectedRoute>
-            <EditProduct />{" "}
+            <AdminRoute>
+              <EditProduct />{" "}
+            </AdminRoute>
           </ProtectedRoute>
         }
       />
