@@ -785,3 +785,470 @@ Planned improvements:
 ---
 
 This authentication module was an important step in transforming the project from a basic CRUD application into a real-world secured full-stack application.
+
+# Frontend Authentication, Authorization & Architecture Improvements
+
+## Overview
+
+This document summarizes the authentication, authorization, API architecture, validation, and user experience improvements implemented in the Smart Inventory & Order Management System frontend.
+
+---
+
+# Features Implemented
+
+## Authentication
+
+- JWT-based Authentication
+- Login Integration with Backend
+- Token Storage using Local Storage
+- Logout Functionality
+- Session Expiration Handling
+
+## Authorization
+
+- Protected Routes
+- Admin Routes
+- Role-Based UI Rendering
+- Role-Based Route Access
+
+## API Architecture
+
+- Migration from Fetch API to Axios
+- Centralized API Service Layer
+- Axios Request Interceptors
+- Axios Response Interceptors
+- Automatic JWT Attachment
+- Global 403 Handling
+
+## User Experience
+
+- Loading States
+- Error States
+- Empty States
+- Toast Notifications
+- Frontend Form Validation
+
+---
+
+# 1. Protected Routes
+
+Implemented a custom `ProtectedRoute` component to restrict access to authenticated users.
+
+## Protected Pages
+
+- Products
+- Product Details
+- Add Product
+- Edit Product
+- Orders
+- Order Details
+- Cart
+
+### Workflow
+
+```text
+User requests protected page
+        ↓
+Token exists?
+   ↙         ↘
+ Yes         No
+  ↓           ↓
+Access     Redirect Login
+```
+
+---
+
+# 2. Role-Based Authorization
+
+User roles are stored after login.
+
+```javascript
+localStorage.setItem("token", data.token);
+localStorage.setItem("role", data.role);
+```
+
+## Supported Roles
+
+- ADMIN
+- USER
+
+### ADMIN Permissions
+
+- Add Product
+- Edit Product
+- Delete Product
+
+### USER Permissions
+
+- View Products
+- View Orders
+- Cart Operations
+
+---
+
+# 3. Admin Route Protection
+
+Implemented `AdminRoute` to prevent unauthorized access.
+
+## Example Routes
+
+```text
+/add
+/products/edit/:id
+```
+
+### Workflow
+
+```text
+User accesses admin page
+          ↓
+Role == ADMIN ?
+     ↙          ↘
+   Yes          No
+    ↓            ↓
+Allow        Redirect
+```
+
+---
+
+# 4. JWT Authentication Flow
+
+```text
+User Login
+     ↓
+Backend Authentication
+     ↓
+JWT Generated
+     ↓
+Token Stored
+     ↓
+Protected API Access
+```
+
+## Stored Data
+
+```text
+token
+role
+```
+
+---
+
+# 5. Logout Functionality
+
+Implemented secure logout.
+
+```javascript
+localStorage.removeItem("token");
+localStorage.removeItem("role");
+```
+
+### Workflow
+
+```text
+Logout
+   ↓
+Remove Token
+   ↓
+Remove Role
+   ↓
+Redirect Login
+```
+
+---
+
+# 6. Session Expiration Handling
+
+Automatic logout when JWT expires.
+
+### Workflow
+
+```text
+JWT Expires
+     ↓
+Backend Returns 403
+     ↓
+Response Interceptor
+     ↓
+Clear Storage
+     ↓
+Redirect Login
+     ↓
+Show Expired Session Message
+```
+
+### Example Message
+
+```text
+Session expired. Please login again.
+```
+
+---
+
+# 7. Migration from Fetch API to Axios
+
+## Before
+
+Each request required:
+
+- Base URL
+- Authorization Header
+- Error Handling
+
+```javascript
+fetch(url, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+```
+
+## After
+
+Centralized API layer:
+
+```javascript
+api.get("/products");
+api.post("/products", product);
+api.put(`/products/${id}`, updatedProduct);
+api.delete(`/products/${id}`);
+```
+
+### Benefits
+
+- Cleaner code
+- Reusable configuration
+- Easier maintenance
+
+---
+
+# 8. Axios Request Interceptor
+
+Automatically attaches JWT token to outgoing requests.
+
+```javascript
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+```
+
+### Workflow
+
+```text
+Request Created
+      ↓
+Interceptor Runs
+      ↓
+JWT Attached
+      ↓
+Request Sent
+```
+
+---
+
+# 9. Axios Response Interceptor
+
+Handles authentication failures globally.
+
+```javascript
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 403) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+
+      window.location.href = "/login?expired=true";
+    }
+
+    return Promise.reject(error);
+  },
+);
+```
+
+### Benefits
+
+- Centralized 403 handling
+- Automatic logout
+- Consistent user experience
+
+---
+
+# 10. Loading States
+
+Implemented loading indicators while data is being fetched.
+
+### Example
+
+```text
+Loading...
+```
+
+### Benefits
+
+- Better user feedback
+- Improved UX
+
+---
+
+# 11. Error States
+
+Implemented user-friendly error messages.
+
+### Examples
+
+```text
+Unable to fetch products
+
+Request failed
+```
+
+### Benefits
+
+- Better debugging
+- Improved user experience
+
+---
+
+# 12. Empty States
+
+Implemented UI for empty datasets.
+
+### Examples
+
+```text
+No products found
+
+No orders found
+```
+
+### Benefits
+
+- Prevents blank pages
+- Improves usability
+
+---
+
+# 13. Frontend Form Validation
+
+Added validation before form submission.
+
+## Product Name
+
+```text
+Required
+```
+
+## Price
+
+```text
+Must be positive
+```
+
+## Quantity
+
+```text
+Must be greater than zero
+```
+
+### Example Validation Logic
+
+```javascript
+if (!name.trim()) {
+  newErrors.name = "Name required";
+}
+
+if (price <= 0) {
+  newErrors.price = "Price must be positive";
+}
+
+if (quantity <= 0) {
+  newErrors.quantity = "Quantity required";
+}
+```
+
+---
+
+# 14. Toast Notifications
+
+Implemented React Toastify for user feedback.
+
+## Success Messages
+
+```text
+Product added successfully
+
+Product updated successfully
+```
+
+## Error Messages
+
+```text
+Failed to add product
+
+Login failed
+```
+
+### Benefits
+
+- Immediate feedback
+- Improved user experience
+- More professional UI
+
+---
+
+# Architecture Overview
+
+```text
+Frontend
+   ↓
+Protected Routes
+   ↓
+Admin Routes
+   ↓
+Axios Service Layer
+   ↓
+Request Interceptor
+   ↓
+Backend API
+   ↓
+Response Interceptor
+   ↓
+Session Handling
+```
+
+---
+
+# Technologies Used
+
+- React
+- React Router
+- Axios
+- React Toastify
+- Spring Security
+- JWT Authentication
+- Local Storage
+
+---
+
+# Learning Outcomes
+
+Through these implementations, the following concepts were learned and applied:
+
+- Authentication vs Authorization
+- JWT-Based Security
+- Role-Based Access Control (RBAC)
+- Protected Frontend Routing
+- Axios Interceptors
+- Session Management
+- Client-Side Validation
+- User Experience Improvements
+- API Layer Architecture
+- Real-World Frontend Security Practices
+- Notification Systems
