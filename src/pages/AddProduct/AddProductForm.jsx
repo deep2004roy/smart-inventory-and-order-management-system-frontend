@@ -2,6 +2,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import "./AddProductForm.css";
 import { useState } from "react";
 import api from "../../services/api";
+import { toast } from "react-toastify";
 function AddProductForm() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -9,9 +10,33 @@ function AddProductForm() {
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [active, setActive] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Name required";
+    }
+
+    if (quantity <= 0) {
+      newErrors.quantity = "Quantity required";
+    }
+
+    if (price <= 0) {
+      newErrors.price = "Price must be positive";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) {
+      return;
+    }
 
     const product = {
       name,
@@ -23,6 +48,8 @@ function AddProductForm() {
     };
     try {
       const response = await api.post("/products", product);
+      toast.success("Product added successfully");
+
       setName("");
       setDescription("");
       setPrice("");
@@ -30,7 +57,7 @@ function AddProductForm() {
       setCategory("");
       setActive(false);
     } catch (error) {
-      console.log("Error: ", error);
+      toast.error("Failed to add product");
     }
   };
 
@@ -49,6 +76,7 @@ function AddProductForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          {errors.name && <p>{errors.name}</p>}
           <label htmlFor="category">Category:</label>
           <input
             type="text"
@@ -73,6 +101,7 @@ function AddProductForm() {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+          {errors.price && <p>{errors.price}</p>}
           <label htmlFor="quantity">Quantity:</label>
           <input
             type="number"
@@ -81,6 +110,7 @@ function AddProductForm() {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
           />
+          {errors.quantity && <p>{errors.quantity}</p>}
           <label htmlFor="active">Active:</label>
           <input
             type="checkbox"
