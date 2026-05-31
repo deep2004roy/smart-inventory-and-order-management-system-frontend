@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./ProductDetails.css";
 import { useCart } from "../../context/CartContext";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 import axios from "axios";
 import api from "../../services/api";
 

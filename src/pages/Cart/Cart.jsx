@@ -3,7 +3,7 @@ import CartCard from "../../components/CartCard/CartCard";
 import { useCart } from "../../context/CartContext";
 import { useEffect } from "react";
 import api from "../../services/api";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 function Cart() {
   const [summary, setSummary] = useState({});
   const { cart } = useCart();

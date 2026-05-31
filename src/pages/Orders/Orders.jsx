@@ -3,7 +3,7 @@ import OrderCard from "../../components/OrderCard/OrderCard";
 import "./Orders.css";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 
 function Orders() {
   const [orders, setOrders] = useState([]);

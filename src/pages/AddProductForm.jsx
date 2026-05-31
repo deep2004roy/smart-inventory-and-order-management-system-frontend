@@ -1,7 +1,6 @@
-import Navbar from "../../components/Navbar/Navbar";
-import "./AddProductForm.css";
+import Navbar from "../components/Navbar";
 import { useState } from "react";
-import api from "../../services/api";
+import api from "../services/api";
 import { toast } from "react-toastify";
 function AddProductForm() {
   const [name, setName] = useState("");
@@ -11,6 +10,7 @@ function AddProductForm() {
   const [category, setCategory] = useState("");
   const [active, setActive] = useState(false);
   const [errors, setErrors] = useState({});
+  const [image, setImage] = useState(null);
 
   const validate = () => {
     const newErrors = {};
@@ -37,17 +37,20 @@ function AddProductForm() {
     if (!validate()) {
       return;
     }
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("quantity", quantity);
+    formData.append("category", category);
+    formData.append("active", active);
 
-    const product = {
-      name,
-      description,
-      price,
-      quantity,
-      category,
-      active,
-    };
+    if (image) {
+      formData.append("image", image);
+    }
+
     try {
-      const response = await api.post("/products", product);
+      const response = await api.post("/products", formData);
       toast.success("Product added successfully");
 
       setName("");
@@ -118,6 +121,12 @@ function AddProductForm() {
             id="active"
             checked={active}
             onChange={(e) => setActive(e.target.checked)}
+          />
+          <label>Product Image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
           />
           <input type="submit" value="Submit" />
         </form>

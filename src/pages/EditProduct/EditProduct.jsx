@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 function EditProduct() {
   const { id } = useParams();
   const [name, setName] = useState("");

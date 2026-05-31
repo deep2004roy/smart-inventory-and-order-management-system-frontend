@@ -1,5 +1,5 @@
-import AddProductForm from "./pages/AddProduct/AddProductForm";
-import Navbar from "./components/Navbar/Navbar";
+import AddProductForm from "./pages/AddProductForm";
+import Navbar from "./components/Navbar";
 import Products from "./pages/Products/Products";
 import { Routes, Route } from "react-router-dom";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";

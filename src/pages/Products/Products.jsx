@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Product from "../../components/ProductCard/Product";
+import Product from "../../components/Product";
 import "./Products.css";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 import api from "../../services/api";
 
 function Products() {
