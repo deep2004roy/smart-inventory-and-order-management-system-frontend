@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 function Product({ product }) {
   return (
-    <Link to={`/products/${product.id}`} className="block">
+    <Link to={`/products/${product.productId}`} className="block">
       <div className="max-w-sm rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 bg-white">
         <img
-          className="w-full h-48 object-cover"
+          className="w-full h-48 object-contain"
           src={`http://localhost:8081/uploads/${product.imageUrl}`}
           alt={product.name}
         />
+
         <div className="px-6 py-4">
           <h2 className="font-bold text-xl mb-2">{product.name}</h2>
           <p className="text-gray-600 text-sm mb-2">{product.category}</p>

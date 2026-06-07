@@ -1252,3 +1252,700 @@ Through these implementations, the following concepts were learned and applied:
 - API Layer Architecture
 - Real-World Frontend Security Practices
 - Notification Systems
+
+## 📤 Product Creation Updated to FormData
+
+Updated the product creation workflow to use **FormData** instead of JSON, enabling support for image uploads.
+
+### 🚀 Why the Change?
+
+Previously, products were submitted as JSON objects:
+
+```javascript id="y2z1p7"
+const product = {
+  name,
+  description,
+  price,
+  quantity,
+  category,
+  active,
+};
+```
+
+This worked for text-based data but could not handle image uploads.
+
+To support product images, the request format was changed to **multipart/form-data** using the browser's FormData API.
+
+---
+
+### 🛠 Implementation
+
+Created a FormData object and appended product fields:
+
+```javascript id="yyr3sk"
+const formData = new FormData();
+
+formData.append("name", name);
+formData.append("description", description);
+formData.append("price", price);
+formData.append("quantity", quantity);
+formData.append("category", category);
+formData.append("active", active);
+```
+
+---
+
+### 📷 Image Upload Support
+
+Added support for optional image uploads:
+
+```javascript id="0h88up"
+if (image) {
+  formData.append("image", image);
+}
+```
+
+The selected image file is now sent together with the product details in a single request.
+
+---
+
+### 🔄 API Request Updated
+
+Product creation request:
+
+```javascript id="13p9zb"
+await api.post("/products", formData);
+```
+
+Axios automatically handles the `multipart/form-data` content type.
+
+---
+
+### 🎯 Benefits
+
+- Supports image uploads
+- Sends text fields and files in a single request
+- Compatible with Spring Boot MultipartFile
+- Enables product image previews and display features
+- Provides a more realistic e-commerce style workflow
+
+---
+
+### ✅ Result
+
+Administrators can now:
+
+- Create products with images
+- Create products without images
+- Upload image files directly from the browser
+- Integrate seamlessly with the backend image upload functionality
+
+This update prepares the frontend for full product image management and enhanced product card UI.
+
+## Add Product Form Enhancements
+
+The Add Product page was updated to provide a more user-friendly interface for creating new products and uploading product images.
+
+### Features Added
+
+#### 1. Form State Management
+
+Implemented React state management using `useState` for all product fields:
+
+- Product Name
+- Description
+- Price
+- Quantity
+- Category
+- Active Status
+- Product Image
+
+This allows the form to be fully controlled by React.
+
+#### 2. Client-Side Validation
+
+Basic validation was added before submitting the form:
+
+- Product name cannot be empty.
+- Price must be greater than 0.
+- Quantity must be greater than 0.
+
+Validation errors are displayed directly below the corresponding input fields.
+
+#### 3. Image Upload Support
+
+Added support for product image uploads using an HTML file input.
+
+```javascript
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setImage(e.target.files[0])}
+/>
+```
+
+Selected images are stored in component state and sent to the backend during form submission.
+
+#### 4. Image Preview
+
+Implemented image preview functionality before submission using:
+
+```javascript
+URL.createObjectURL(image);
+```
+
+This allows users to verify the selected image before uploading.
+
+#### 5. FormData Submission
+
+The form now sends data as `multipart/form-data` instead of JSON.
+
+```javascript
+const formData = new FormData();
+
+formData.append("name", name);
+formData.append("description", description);
+formData.append("price", price);
+formData.append("quantity", quantity);
+formData.append("category", category);
+formData.append("active", active);
+
+if (image) {
+  formData.append("image", image);
+}
+```
+
+This enables simultaneous transmission of product information and image files.
+
+#### 6. API Integration
+
+Connected the form to the backend API using Axios:
+
+```javascript
+await api.post("/products", formData);
+```
+
+The backend receives the product details and uploaded image in a single request.
+
+#### 7. Success and Error Notifications
+
+Added toast notifications using React Toastify.
+
+Success:
+
+```javascript
+toast.success("Product added successfully");
+```
+
+Failure:
+
+```javascript
+toast.error("Failed to add product");
+```
+
+This provides immediate feedback to users after form submission.
+
+#### 8. Modern UI Styling
+
+The form was redesigned using Tailwind CSS with:
+
+- Responsive two-column layout
+- Styled input fields
+- Focus states
+- Validation messages
+- Product image preview
+- Styled submit button
+- Card-based design with shadow effects
+
+### Result
+
+Users can now:
+
+1. Enter product details.
+2. Upload a product image.
+3. Preview the image before submission.
+4. Validate input fields.
+5. Submit product data and image together using `multipart/form-data`.
+6. Receive success or failure feedback through toast notifications.
+
+This significantly improves the product creation workflow and provides a better user experience.
+
+# UI & Order Management Improvements
+
+## Products Page Redesign
+
+The Products page was redesigned using Tailwind CSS to provide a cleaner and more modern shopping experience.
+
+### Features Implemented
+
+- Responsive product grid layout.
+- Search products by name.
+- Filter products by category.
+- Sort products by price (ascending/descending).
+- Server-side pagination.
+- Loading state while products are being fetched.
+- Error handling UI.
+- Empty state when no products are found.
+- Consistent card-based design with shadows and hover effects.
+
+### Pagination
+
+Products are fetched using Spring Data pagination:
+
+```http
+GET /products?page=0&size=12
+```
+
+The frontend tracks:
+
+- Current page
+- Total pages returned by the backend
+
+Navigation buttons are automatically enabled/disabled based on page boundaries.
+
+---
+
+## Product Card Redesign
+
+Each product is displayed using a reusable Product Card component.
+
+### Card Contents
+
+- Product image
+- Product name
+- Category
+- Short description
+- Price badge
+- Available stock badge
+
+### Design Improvements
+
+- Card hover animations
+- Shadow elevation effects
+- Consistent spacing and typography
+- Responsive image display using `object-contain`
+- Clickable card navigation to Product Details page
+
+---
+
+## Product Details Page
+
+The Product Details page was designed to provide complete information about a product.
+
+### Information Displayed
+
+- Product image
+- Product name
+- Product description
+- Category
+- Price
+- Available stock
+
+### Additional Features
+
+- Edit Product option for administrators
+- Delete Product option for administrators
+- Improved layout consistency with the Products page
+
+---
+
+# Orders Module Improvements
+
+## Backend Pagination Support
+
+Orders endpoint was updated to support pagination.
+
+### Endpoint
+
+```http
+GET /orders?page=0&size=12
+```
+
+Returns:
+
+```java
+Page<Order>
+```
+
+This provides:
+
+- content
+- totalPages
+- totalElements
+- current page information
+
+which allows proper frontend pagination.
+
+---
+
+## Order Status Filtering
+
+The Orders endpoint was enhanced to support filtering by status.
+
+### Endpoint
+
+```http
+GET /orders?status=SHIPPED&page=0&size=12
+```
+
+Supported statuses:
+
+- PENDING
+- CONFIRMED
+- SHIPPED
+- DELIVERED
+- CANCELLED
+
+This allows administrators to quickly locate specific groups of orders.
+
+---
+
+## Orders Page Redesign
+
+The Orders page was redesigned using the same design language as the Products page.
+
+### Features
+
+- Status filtering
+- Paginated order listing
+- Loading state
+- Error state
+- Empty state
+- Responsive card grid layout
+
+### Additional Improvements
+
+The page displays:
+
+- Number of orders shown on the current page
+- Current page indicator
+- Total page count
+
+Example:
+
+```text
+Page 2 of 5
+```
+
+Navigation buttons automatically disable when the first or last page is reached.
+
+---
+
+## Order Card Redesign
+
+The Order Card component was redesigned to provide a concise order summary.
+
+### Information Displayed
+
+- Order ID
+- Order Date
+- Total Amount
+- Current Status
+
+### Design Improvements
+
+- Clickable card navigation
+- Status badge styling
+- Hover animations
+- Shadow effects
+- Improved spacing and readability
+
+The card acts as an entry point to the full Order Details page.
+
+---
+
+# Order Details Enhancement
+
+## Problem
+
+Initially, the Order Details page only displayed:
+
+- Order ID
+- Date
+- Total Amount
+- Status
+
+This provided very little information beyond what was already visible in the Order Card.
+
+---
+
+## Backend Improvements
+
+To provide complete order information, a dedicated response structure was introduced.
+
+### New DTOs
+
+#### OrderDetailsDTO
+
+```java
+public class OrderDetailsDTO {
+    private int id;
+    private Date date;
+    private int totalAmount;
+    private OrderStatus status;
+    private List<OrderItemDTO> items;
+}
+```
+
+#### OrderItemDTO
+
+```java
+public class OrderItemDTO {
+    private Long productId;
+    private String productName;
+    private Double price;
+    private int quantity;
+    private Double subtotal;
+}
+```
+
+---
+
+## Repository Enhancement
+
+A repository method was added to retrieve all items belonging to a specific order.
+
+```java
+List<OrderItem> findByOrder(Order order);
+```
+
+This allows the backend to fetch all products associated with an order.
+
+---
+
+## Service Layer Enhancement
+
+The Order Details service now:
+
+1. Retrieves the Order.
+2. Retrieves all related OrderItems.
+3. Converts OrderItems into OrderItemDTO objects.
+4. Calculates item subtotals.
+5. Returns a complete OrderDetailsDTO.
+
+This transforms the endpoint from a simple order lookup into a complete order summary.
+
+---
+
+## Updated Endpoint
+
+Before:
+
+```java
+@GetMapping("/orders/{id}")
+public Order getOrderById(@PathVariable int id)
+```
+
+After:
+
+```java
+@GetMapping("/orders/{id}")
+public OrderDetailsDTO getOrderById(@PathVariable int id)
+```
+
+The endpoint now returns both order metadata and purchased items.
+
+---
+
+## Order Details Page Redesign
+
+The frontend was redesigned to consume the new OrderDetailsDTO.
+
+### Sections
+
+#### Order Information
+
+Displays:
+
+- Order ID
+- Date
+- Total Amount
+- Status badge
+
+---
+
+#### Ordered Items
+
+Displays every purchased item:
+
+```text
+Laptop
+₹50000 × 2      ₹100000
+```
+
+Information shown:
+
+- Product Name
+- Unit Price
+- Quantity
+- Item Subtotal
+
+---
+
+#### Grand Total
+
+Displays the final order amount.
+
+Example:
+
+```text
+Grand Total
+₹102500
+```
+
+---
+
+#### Status Management
+
+Administrators can update order status directly from the Order Details page.
+
+Supported statuses:
+
+- PENDING
+- CONFIRMED
+- SHIPPED
+- DELIVERED
+- CANCELLED
+
+Includes:
+
+- Loading state while updating
+- Disabled controls during updates
+- Automatic refresh after successful status change
+
+---
+
+## Result
+
+The Order Details page evolved from a simple metadata view into a complete order management interface that provides:
+
+- Full order visibility
+- Purchased product information
+- Quantity tracking
+- Price breakdown
+- Order status management
+- Improved administrator workflow
+
+# Frontend Updates
+
+## Product Image Upload Support
+
+### Features Implemented
+
+- Switched product creation requests from JSON to FormData.
+- Added image file selection support.
+- Added image preview before upload.
+- Integrated image upload with backend API.
+
+---
+
+## Product Display Improvements
+
+### Features
+
+- Display uploaded product images.
+- Improved image rendering.
+- Added proper image sizing using object-cover.
+- Better visual presentation of products.
+
+---
+
+## Add Product Page Improvements
+
+### UI Enhancements
+
+- Modern Tailwind CSS form design.
+- Responsive layout.
+- Loading state during submission.
+- Image preview support.
+
+### Validation
+
+- Product name required.
+- Category required.
+- Price must be greater than zero.
+- Quantity must be greater than zero.
+
+### Notifications
+
+- Success notification after product creation.
+- Error notification when creation fails.
+
+---
+
+## Edit Product Page
+
+### Features
+
+- Load existing product details.
+- Update product information.
+- Replace existing product image.
+- Preview newly selected image.
+- Loading state while fetching product data.
+- Success and error toast notifications.
+
+---
+
+## Category Management
+
+### Improvements
+
+- Replaced text input with category dropdown.
+- Standardized category values.
+- Improved user experience.
+- Prevented category spelling inconsistencies.
+
+### Available Categories
+
+- Electronics
+- Books
+- Clothes
+
+---
+
+## Cart Page Improvements
+
+### Features
+
+- Loading state while fetching cart summary.
+- Empty cart screen.
+- Continue Shopping button.
+- Checkout confirmation prompt.
+- Order summary section.
+
+### Summary Information
+
+- Total items
+- Total amount
+
+---
+
+## Cart Card Redesign
+
+### Features
+
+- Product image display.
+- Product name.
+- Product price.
+- Quantity display.
+- Subtotal calculation.
+- Remove item button.
+
+### UI Improvements
+
+- Modern card layout.
+- Responsive design.
+- Improved spacing and typography.
+- Hover effects.
+
+---
+
+## User Feedback
+
+Implemented React Toastify notifications for:
+
+- Product creation success.
+- Product creation failure.
+- Product update success.
+- Product update failure.
+- Product loading failure.

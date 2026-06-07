@@ -45,15 +45,15 @@ function CartProvider({ children }) {
   //----------check out -----------------
   const checkOut = async () => {
     const order = { orderItemRequests: cart };
+
     try {
-      const response = await fetch(`/orders`, order);
-      if (!response.ok) {
-        throw new Error("no such order");
-      }
+      await api.post("/orders", order);
+
       setCart([]);
       navigate("/orders");
     } catch (error) {
       console.log(error);
+      throw error; // important for the toast in Cart.jsx
     }
   };
 
