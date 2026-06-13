@@ -33,6 +33,9 @@ function Navbar() {
           <Link to={"/cart"}>
             <p>Cart</p>
           </Link>
+          <Link to={"/dashboard"}>
+            <p>Dashboard</p>
+          </Link>
           {token ? (
             <button onClick={handleLogout}>Logout</button>
           ) : (

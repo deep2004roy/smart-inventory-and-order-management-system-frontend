@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import { ToastContainer } from "react-toastify";
+import Dashboard from "./pages/Dashboard";
 function App() {
   return (
     <>
@@ -21,6 +22,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Cart />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />{" "}
             </ProtectedRoute>
           }
         />
