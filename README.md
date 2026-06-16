@@ -1949,3 +1949,246 @@ Implemented React Toastify notifications for:
 - Product update success.
 - Product update failure.
 - Product loading failure.
+
+# Dashboard Analytics Module
+
+## Overview
+
+Implemented a comprehensive Dashboard module to provide administrators with a real-time overview of inventory health, order activity, and business performance.
+
+The dashboard aggregates data from multiple backend services and presents it through summary cards, charts, and recent activity sections.
+
+---
+
+## Key Performance Indicators (KPIs)
+
+Added dashboard summary cards displaying:
+
+- Total Products
+- Total Stock Available
+- Total Orders
+- Total Revenue
+
+These metrics provide a quick snapshot of overall business activity.
+
+Example:
+
+```text
+Total Products: 120
+Total Stock: 5,430
+Total Orders: 342
+Revenue: ₹8,75,000
+```
+
+---
+
+## Order Status Overview
+
+Implemented separate status cards for monitoring the order lifecycle.
+
+Displayed statuses:
+
+- Pending Orders
+- Confirmed Orders
+- Shipped Orders
+- Delivered Orders
+- Cancelled Orders
+
+This allows administrators to quickly identify bottlenecks in order processing.
+
+### Example
+
+```text
+Pending: 12
+Confirmed: 18
+Shipped: 9
+Delivered: 247
+Cancelled: 6
+```
+
+---
+
+## Revenue Trend Visualization
+
+Implemented a revenue analytics chart using Recharts.
+
+### Features
+
+- Monthly revenue tracking
+- Interactive chart visualization
+- Backend-driven data
+- Responsive design
+
+The chart helps visualize business growth and sales trends over time.
+
+### Technologies Used
+
+- Recharts
+- LineChart
+- ResponsiveContainer
+
+---
+
+## Top Selling Products Analytics
+
+Added a Top Selling Products chart to identify the best-performing products.
+
+Displayed information:
+
+- Product Name
+- Total Units Sold
+
+### Benefits
+
+- Helps identify popular products
+- Supports inventory planning
+- Provides sales insights
+
+### Technologies Used
+
+- Recharts
+- BarChart
+- Tooltip
+- ResponsiveContainer
+
+---
+
+## Low Stock Monitoring
+
+Implemented a dedicated Low Stock Products section.
+
+Displays:
+
+- Product Name
+- Current Quantity
+- Stock Status
+
+Products below the configured stock threshold are automatically displayed.
+
+### Features
+
+- Quick inventory visibility
+- Direct navigation to product details
+- Low stock alert indicator
+
+### Example
+
+```text
+Wireless Mouse    3
+USB Keyboard      2
+Laptop Stand      1
+```
+
+---
+
+## Recent Orders Section
+
+Added a Recent Orders panel displaying the latest order activity.
+
+Displayed information:
+
+- Order ID
+- Order Date
+- Total Amount
+- Current Status
+
+### Features
+
+- Status badges with color coding
+- Direct navigation to order details
+- Quick access to recent transactions
+
+Supported statuses:
+
+```text
+PENDING
+CONFIRMED
+SHIPPED
+DELIVERED
+CANCELLED
+```
+
+---
+
+## User Experience Improvements
+
+Implemented:
+
+- Loading state while dashboard data is being fetched
+- Error handling for failed API requests
+- Responsive dashboard layout
+- Card-based UI design
+- Interactive navigation to products and orders
+
+---
+
+## Backend Integration
+
+Dashboard data is fetched through a dedicated summary endpoint.
+
+### Endpoint
+
+```http
+GET /dashboard/summary
+```
+
+The endpoint returns:
+
+- Inventory statistics
+- Revenue metrics
+- Order statistics
+- Top-selling products
+- Monthly revenue data
+- Low-stock products
+- Recent orders
+
+This reduces multiple API calls by aggregating dashboard data into a single response.
+
+---
+
+## Technologies Used
+
+### Frontend
+
+- React
+- React Hooks
+- Axios
+- Tailwind CSS
+- Recharts
+
+### Backend
+
+- Spring Boot
+- Spring Data JPA
+- DTO Pattern
+- REST APIs
+
+---
+
+## Learning Outcomes
+
+Through this implementation I learned:
+
+- Dashboard design principles
+- Data aggregation using DTOs
+- Business KPI visualization
+- Chart integration with Recharts
+- Analytics-driven UI development
+- Responsive dashboard layouts
+- Managing complex API responses
+- Real-time inventory and order monitoring
+
+---
+
+## Result
+
+The Dashboard module transformed the application from a transactional system into a business monitoring platform by providing:
+
+- Inventory visibility
+- Revenue analytics
+- Order tracking
+- Sales insights
+- Low stock monitoring
+- Operational overview
+
+This makes the system closer to a real-world inventory and order management application used by businesses.
